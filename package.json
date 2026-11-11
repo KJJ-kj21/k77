@@ -1,0 +1,15 @@
+{
+  "name": "campus-market",
+  "version": "1.0.0",
+  "description": "校园交易平台（二手集市）—— 零依赖，Node.js 内置 http + node:sqlite",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "license": "MIT"
+}
