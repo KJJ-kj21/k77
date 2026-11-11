@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>校园集市 · 二手交易平台</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="#" data-nav="home">
+        <span class="brand-logo">🎓</span>
+        <span class="brand-name">校园集市</span>
+      </a>
+
+      <div class="search-box" id="search-box">
+        <input type="text" id="search-input" placeholder="搜索商品、教材、数码…" />
+        <button id="search-btn" title="搜索">🔍</button>
+      </div>
+
+      <nav class="nav-actions" id="nav-actions">
+        <!-- 由 JS 根据登录状态渲染 -->
+      </nav>
+    </div>
+  </header>
+
+  <!-- 分类栏 -->
+  <div class="category-bar" id="category-bar"></div>
+
+  <main class="container">
+    <!-- 登录 / 注册 -->
+    <section id="view-auth" class="view hidden">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth-tab="login">登录</button>
+          <button class="auth-tab" data-auth-tab="register">注册</button>
+        </div>
+
+        <!-- 登录表单 -->
+        <form id="login-form" class="auth-form" novalidate>
+          <label>用户名
+            <input type="text" name="username" autocomplete="username" placeholder="请输入用户名" required />
+          </label>
+          <label>密码
+            <input type="password" name="password" autocomplete="current-password" placeholder="请输入密码" required />
+          </label>
+          <button type="submit" class="btn btn-primary btn-block">登 录</button>
+          <p class="auth-hint">还没有账号？<a href="#" data-auth-tab="register">立即注册</a></p>
+        </form>
+
+        <!-- 注册表单 -->
+        <form id="register-form" class="auth-form hidden" novalidate>
+          <label>用户名 <span class="req">*</span>
+            <input type="text" name="username" autocomplete="username" placeholder="3-20 位，中英文/数字/下划线" required />
+          </label>
+          <label>昵称
+            <input type="text" name="nickname" placeholder="展示给其他同学的名字" />
+          </label>
+          <label>密码 <span class="req">*</span>
+            <input type="password" name="password" autocomplete="new-password" placeholder="至少 6 位" required />
+          </label>
+          <label>手机号
+            <input type="text" name="phone" placeholder="选填，方便买家联系" />
+          </label>
+          <label>微信号
+            <input type="text" name="wechat" placeholder="选填" />
+          </label>
+          <button type="submit" class="btn btn-primary btn-block">注 册</button>
+          <p class="auth-hint">已有账号？<a href="#" data-auth-tab="login">去登录</a></p>
+        </form>
+      </div>
+    </section>
+
+    <!-- 首页商品列表 -->
+    <section id="view-home" class="view">
+      <div class="section-head">
+        <h2 id="home-title">全部商品</h2>
+        <div class="sort-row">
+          <select id="sort-select" class="select">
+            <option value="new">最新发布</option>
+            <option value="price_asc">价格从低到高</option>
+            <option value="price_desc">价格从高到低</option>
+          </select>
+        </div>
+      </div>
+      <div id="items-grid" class="items-grid"></div>
+      <div id="empty-state" class="empty hidden">
+        <div class="empty-icon">🛒</div>
+        <p>暂时没有商品，快来发布第一件吧～</p>
+      </div>
+    </section>
+
+    <!-- 商品详情 -->
+    <section id="view-detail" class="view hidden">
+      <button class="btn btn-ghost back-btn" data-nav="home">← 返回列表</button>
+      <div id="detail-content"></div>
+    </section>
+
+    <!-- 发布商品 -->
+    <section id="view-post" class="view hidden">
+      <div class="post-card">
+        <h2>发布商品</h2>
+        <form id="post-form" class="post-form" novalidate>
+          <div class="field">
+            <label>标题 <span class="req">*</span></label>
+            <input type="text" name="title" maxlength="60" placeholder="例如：九成新 iPhone 13 128G" required />
+          </div>
+          <div class="field">
+            <label>价格（元） <span class="req">*</span></label>
+            <input type="number" name="price" min="0" step="0.01" placeholder="0.00" required />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>分类 <span class="req">*</span></label>
+              <select name="category" id="post-category" class="select" required></select>
+            </div>
+            <div class="field">
+              <label>成色</label>
+              <select name="cond" id="post-cond" class="select"></select>
+            </div>
+          </div>
+          <div class="field">
+            <label>描述</label>
+            <textarea name="description" rows="4" maxlength="2000" placeholder="描述商品的使用情况、入手渠道、交易方式等…"></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>交易地点</label>
+              <input type="text" name="location" placeholder="例如：三食堂门口 / 图书馆" />
+            </div>
+            <div class="field">
+              <label>联系方式</label>
+              <input type="text" name="contact" placeholder="微信号 / 手机号" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>商品图片（最多 6 张，每张 ≤ 6MB）</label>
+            <div class="uploader">
+              <div id="image-previews" class="image-previews"></div>
+              <label class="upload-btn" id="upload-btn">
+                <span>＋ 添加图片</span>
+                <input type="file" id="image-input" accept="image/*" multiple hidden />
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-ghost" data-nav="home">取消</button>
+            <button type="submit" class="btn btn-primary" id="post-submit">发布</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 我的 -->
+    <section id="view-profile" class="view hidden">
+      <div class="profile-card">
+        <div class="profile-avatar" id="profile-avatar">👤</div>
+        <div class="profile-info">
+          <h2 id="profile-nickname"></h2>
+          <p id="profile-meta"></p>
+        </div>
+        <button class="btn btn-primary" data-nav="post">＋ 发布商品</button>
+      </div>
+      <div class="section-head"><h2>我发布的商品</h2></div>
+      <div id="my-items-grid" class="items-grid"></div>
+      <div id="my-empty" class="empty hidden">
+        <div class="empty-icon">📦</div>
+        <p>还没有发布过商品</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">校园集市 · 让闲置流动起来 ♻️</footer>
+
+  <!-- 轻提示 -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/assets/app.js"></script>
+</body>
+</html>
