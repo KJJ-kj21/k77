@@ -1,0 +1,17 @@
+# 运行时生成的数据库文件（含测试数据，不入库）
+data.db
+data.db-wal
+data.db-shm
+*.db
+
+# 用户上传的图片
+uploads/
+
+# 依赖与日志
+node_modules/
+*.log
+
+# 系统文件
+Thumbs.db
+Desktop.ini
+.DS_Store
